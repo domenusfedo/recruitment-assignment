@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { FaSearch } from 'react-icons/fa'
 
 export const AppHolder = styled.div`
     width: 100%;
@@ -16,4 +17,10 @@ export const Holder = styled.div`
     justify-content: center;
     align-items: center;
     flex-direction: row;
+`
+
+export const SearchIcon = styled(FaSearch)`
+    color: ${({ theme }) => theme.colors.white};
+    font-size: 2rem;
+    cursor: pointer;
 `

@@ -1,9 +1,21 @@
 import React, { useEffect } from 'react';
 
 import {
+    SearchHolder,
+    Text,
+    ButtonHolder,
+    ToggleButton,
+    SearchPlace,
     SearchField,
+    SearchIcon,
     SuggestionsList,
-    SuggestionsListItem
+    SuggestionsListItem,
+    Header,
+    Row,
+    Title,
+    Category,
+    Image,
+    Button
 } from './Search.elements'
 
 import {Suggestion} from '.././../features/termsSlice';
@@ -12,14 +24,16 @@ import { RootState } from '../../app/store';
 import { useSelector } from 'react-redux';
 
 interface IProps {
-    
+    toggleSearchSet: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const Search: React.FC<IProps> = () => {
+const Search: React.FC<IProps> = ({toggleSearchSet}) => {
     const {suggestions} = useSelector((state: RootState) => state.terms)
 
     const [showSuggestions, showSuggestionsSet] = React.useState<boolean>(false);
     const [terms, termsSet] = React.useState<string>('');
+
+    const [text, textSet] = React.useState<string>('Search');
 
     const changeHanlder = (value: string) => {
         termsSet(value)
@@ -28,6 +42,14 @@ const Search: React.FC<IProps> = () => {
     const addNewKeyword = () => {
         //dispatch locally new 
     }
+
+    useEffect(() => {
+        if(showSuggestions) {
+            textSet('Skill, location, company')
+        } else {
+            textSet('Search')
+        }
+    }, [showSuggestions])
 
     useEffect(() => {
         const fetchTimer = setTimeout(() => {
@@ -40,25 +62,57 @@ const Search: React.FC<IProps> = () => {
     }, [terms])
 
     return (
-        <>
+        <SearchHolder>
+            <Header isAbsolute={false}>
+                <Text>Search</Text>
+                <ButtonHolder onClick={() => toggleSearchSet(false)}>
+                    <ToggleButton/>
+                </ButtonHolder>
+            </Header>
+
+            <SearchPlace>
+                <SearchIcon/>
+                <SearchField
+                    placeholder={text}
+                    value={terms}
+                    onChange={(e) => changeHanlder(e.target.value)}
+                    onFocus={() => showSuggestionsSet(true)}
+                    onBlur={() => showSuggestionsSet(false)}
+                />
+            </SearchPlace>
             {/* Choosed Items */}
-            <SearchField
-                placeholder='Search...'
-                value={terms}
-                onChange={(e) => changeHanlder(e.target.value)}
-                onFocus={() => showSuggestionsSet(true)}
-                onBlur={() => showSuggestionsSet(false)}
-            />
-            <SuggestionsList>
-                {(suggestions.length > 0  && showSuggestions) && (
-                    suggestions.map((s: Suggestion) => <SuggestionsListItem key={s.id}>{s.value}</SuggestionsListItem>)
-                )}
-                
-                {(suggestions.length === 0 && showSuggestions) && (
-                    <div>Add new category to Your state</div>
+            
+           {showSuggestions && (
+                <SuggestionsList>
+                {terms.length > 0 && (
+                    <SuggestionsListItem key={321412}>
+                        <Row>
+                            <Image/>
+                        </Row>
+                        <Row>
+                            <Title>{terms}</Title>
+                            <Category>KEYWORD</Category>
+                        </Row>
+                    </SuggestionsListItem>)}
+                {suggestions.length > 0 && (
+                    suggestions.map((s: Suggestion) => <SuggestionsListItem key={s.id}>
+                        <Row>
+                            <Image/>
+                        </Row>
+                        <Row>
+                            <Title>{s.value}</Title>
+                            <Category>{s.category.toUpperCase()}</Category>
+                        </Row>
+                    </SuggestionsListItem>)
                 )}
             </SuggestionsList>
-        </>
+           )}
+
+            <Header isAbsolute={true}>
+                <Button isCTA={false}>Clear search</Button>
+                <Button isCTA={true}>Show Offers</Button>
+            </Header>
+        </SearchHolder>
     );
 };
 

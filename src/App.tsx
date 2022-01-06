@@ -2,7 +2,8 @@ import React from 'react';
 
 import {
   AppHolder,
-  Holder
+  Holder,
+  SearchIcon
 } from './App.elements';
 
 import { 
@@ -10,11 +11,13 @@ import {
 } from './components/index'
 
 const App = () => {
+  const [toggleSearch, toggleSearchSet] = React.useState<boolean>(false)
 
   return (
    <AppHolder>
      <Holder>
-        <Search/>
+        <SearchIcon onClick={() =>toggleSearchSet(!toggleSearch)}/>
+        {toggleSearch && <Search toggleSearchSet={toggleSearchSet}/>}
       </Holder>
    </AppHolder>
   );
