@@ -8,7 +8,8 @@ export interface Suggestion {
 }
 
 interface TermsState {
-    suggestions: Suggestion[]
+    suggestions: Suggestion[],
+    choosed: Suggestion[]
 }
 
 const initialState: TermsState = {
@@ -38,7 +39,8 @@ const initialState: TermsState = {
             category: 'Company',
             value: 'NoA Ignite'
         }
-    ]
+    ],
+    choosed: []
 }
 
 const termsSlice = createSlice({
