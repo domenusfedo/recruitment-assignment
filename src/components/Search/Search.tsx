@@ -25,11 +25,15 @@ const Search: React.FC<IProps> = () => {
         termsSet(value)
     }
 
+    const addNewKeyword = () => {
+        //dispatch locally new 
+    }
+
     useEffect(() => {
         const fetchTimer = setTimeout(() => {
-            //console.log('search')
+            console.log('search')
             //fetching from API suggestionsSet
-        }, 500)
+        }, 250)
         return () => {
             clearTimeout(fetchTimer)
         }
@@ -37,6 +41,7 @@ const Search: React.FC<IProps> = () => {
 
     return (
         <>
+            {/* Choosed Items */}
             <SearchField
                 placeholder='Search...'
                 value={terms}
@@ -45,8 +50,12 @@ const Search: React.FC<IProps> = () => {
                 onBlur={() => showSuggestionsSet(false)}
             />
             <SuggestionsList>
-                {showSuggestions && (
+                {(suggestions.length > 0  && showSuggestions) && (
                     suggestions.map((s: Suggestion) => <SuggestionsListItem key={s.id}>{s.value}</SuggestionsListItem>)
+                )}
+                
+                {(suggestions.length === 0 && showSuggestions) && (
+                    <div>Add new category to Your state</div>
                 )}
             </SuggestionsList>
         </>
