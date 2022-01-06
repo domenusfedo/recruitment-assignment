@@ -15,10 +15,10 @@ import {
     ElementsHolder
 } from './Search.elements'
 
-import {Suggestion} from '.././../features/termsSlice';
+import {addElementToChoosed, removeElementFromChoosed, Suggestion} from '.././../features/termsSlice';
 import { RootState } from '../../app/store';
 
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import Element from '../UI/Element/Element';
 import ChoosedElement from '../UI/ChoosedElement/ChoosedElement';
@@ -28,6 +28,8 @@ interface IProps {
 }
 
 const Search: React.FC<IProps> = ({toggleSearchSet}) => {
+    const dispatch = useDispatch();
+
     const {suggestions, choosed} = useSelector((state: RootState) => state.terms)
 
     const [showSuggestions, showSuggestionsSet] = React.useState<boolean>(false);
@@ -39,10 +41,17 @@ const Search: React.FC<IProps> = ({toggleSearchSet}) => {
         termsSet(value)
     }
 
-    const blurHanlder = () => {
-        // if(choosed.length !== 0) return;
+    const toggleHanlder = () => {
+        showSuggestionsSet(!showSuggestions)
+    }
 
-        showSuggestionsSet(false)
+
+    const addElementHandler = (element: Suggestion) => {
+        dispatch(addElementToChoosed(element))
+    }
+
+    const removeElementHandler = (element: Suggestion) => {
+        dispatch(removeElementFromChoosed(element))
     }
 
 
@@ -73,31 +82,35 @@ const Search: React.FC<IProps> = ({toggleSearchSet}) => {
                 </ButtonHolder>
             </Header>
 
+
             <SearchPlace>
                 <SearchIcon/>
                 <SearchField
                     placeholder={text}
                     value={terms}
                     onChange={(e) => changeHanlder(e.target.value)}
-                    onFocus={() => showSuggestionsSet(true)}
-                    onBlur={blurHanlder}
+                    onFocus={toggleHanlder}
+                    onBlur={toggleHanlder}
                 />
             </SearchPlace>
+            
             <ElementsHolder>
 
-                <ChoosedList>
-                    {choosed.map((c: Suggestion) => <ChoosedElement  key={c.value} element={c}/>)}
-                </ChoosedList>
+                {/* <ChoosedList>
+                    {choosed.map((c: Suggestion) => <ChoosedElement key={c.value} element={c} removeElementHandler={removeElementHandler}/>)}
+                </ChoosedList> */}
 
-                {(showSuggestions || choosed.length === 0) && <SuggestionsList>
+                {/* isActive={showSuggestions || choosed.length === 0} */}
+
+                <SuggestionsList>
                     {terms.length > 0 && <Element key={terms} element={{
                         value: terms,
                         category: 'KEYWORD',
                         id: Math.random()
-                    }} />}
+                    }} addElementHandler={addElementHandler}/>}
 
-                    {suggestions.map((s: Suggestion) => <Element key={s.value} element={s}/>)}
-                </SuggestionsList> }
+                    {suggestions.map((s: Suggestion) => <Element key={s.value} element={s} addElementHandler={() => addElementHandler(s)}/>)}
+                </SuggestionsList>
             </ElementsHolder>
 
             <Header isAbsolute={true}>
