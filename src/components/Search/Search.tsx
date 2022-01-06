@@ -9,13 +9,10 @@ import {
     SearchField,
     SearchIcon,
     SuggestionsList,
-    SuggestionsListItem,
+    ChoosedList,
     Header,
-    Row,
-    Title,
-    Category,
-    Image,
-    Button
+    Button,
+    ElementsHolder
 } from './Search.elements'
 
 import {Suggestion} from '.././../features/termsSlice';
@@ -23,12 +20,15 @@ import { RootState } from '../../app/store';
 
 import { useSelector } from 'react-redux';
 
+import Element from '../UI/Element/Element';
+import ChoosedElement from '../UI/ChoosedElement/ChoosedElement';
+
 interface IProps {
     toggleSearchSet: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const Search: React.FC<IProps> = ({toggleSearchSet}) => {
-    const {suggestions} = useSelector((state: RootState) => state.terms)
+    const {suggestions, choosed} = useSelector((state: RootState) => state.terms)
 
     const [showSuggestions, showSuggestionsSet] = React.useState<boolean>(false);
     const [terms, termsSet] = React.useState<string>('');
@@ -39,9 +39,12 @@ const Search: React.FC<IProps> = ({toggleSearchSet}) => {
         termsSet(value)
     }
 
-    const addNewKeyword = () => {
-        //dispatch locally new 
+    const blurHanlder = () => {
+        // if(choosed.length !== 0) return;
+
+        showSuggestionsSet(false)
     }
+
 
     useEffect(() => {
         if(showSuggestions) {
@@ -77,39 +80,28 @@ const Search: React.FC<IProps> = ({toggleSearchSet}) => {
                     value={terms}
                     onChange={(e) => changeHanlder(e.target.value)}
                     onFocus={() => showSuggestionsSet(true)}
-                    onBlur={() => showSuggestionsSet(false)}
+                    onBlur={blurHanlder}
                 />
             </SearchPlace>
-            {/* Choosed Items */}
-            
-           {showSuggestions && (
-                <SuggestionsList>
-                {terms.length > 0 && (
-                    <SuggestionsListItem key={321412}>
-                        <Row>
-                            <Image/>
-                        </Row>
-                        <Row>
-                            <Title>{terms}</Title>
-                            <Category>KEYWORD</Category>
-                        </Row>
-                    </SuggestionsListItem>)}
-                {suggestions.length > 0 && (
-                    suggestions.map((s: Suggestion) => <SuggestionsListItem key={s.id}>
-                        <Row>
-                            <Image/>
-                        </Row>
-                        <Row>
-                            <Title>{s.value}</Title>
-                            <Category>{s.category.toUpperCase()}</Category>
-                        </Row>
-                    </SuggestionsListItem>)
-                )}
-            </SuggestionsList>
-           )}
+            <ElementsHolder>
+
+                <ChoosedList>
+                    {choosed.map((c: Suggestion) => <ChoosedElement  key={c.value} element={c}/>)}
+                </ChoosedList>
+
+                {(showSuggestions || choosed.length === 0) && <SuggestionsList>
+                    {terms.length > 0 && <Element key={terms} element={{
+                        value: terms,
+                        category: 'KEYWORD',
+                        id: Math.random()
+                    }} />}
+
+                    {suggestions.map((s: Suggestion) => <Element key={s.value} element={s}/>)}
+                </SuggestionsList> }
+            </ElementsHolder>
 
             <Header isAbsolute={true}>
-                <Button isCTA={false}>Clear search</Button>
+                <Button isCTA={false} onClick={() => toggleSearchSet(false)}>Clear search</Button>
                 <Button isCTA={true}>Show Offers</Button>
             </Header>
         </SearchHolder>

@@ -28,8 +28,8 @@ const initialState: TermsState = {
             value: 'Wroclaw'
         }, {
             id: 4,
-            category: 'React',
-            value: 'Category'
+            category: 'Category',
+            value: 'React'
         }, {
             id: 5,
             category: 'Skill',
@@ -47,12 +47,18 @@ const termsSlice = createSlice({
     name: 'terms',
     initialState,
     reducers: {
-        //actions
+        addElementToChoosed: (state, action: PayloadAction<Suggestion>) => {
+            state.choosed = [...state.choosed, action.payload]
+        },
+        removeElementFromChoosed: (state, action: PayloadAction<Suggestion>) => {
+            state.choosed = state.choosed.filter((e: Suggestion) => e.id !== action.payload.id)
+        }
     }
 })
 
 export const {
-    //actions
+    addElementToChoosed,
+    removeElementFromChoosed
 } = termsSlice.actions
 
 export default termsSlice.reducer;

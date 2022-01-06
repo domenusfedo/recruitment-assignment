@@ -105,57 +105,24 @@ export const SearchField = styled.input`
     font-size: 1rem;
 `
 
-export const SuggestionsList = styled.ul`
+const List = styled.ul`
     text-decoration: none;
     list-style-type: none;
     margin: 0;
     padding: 1rem 2rem;
     width: 100%;
+    position: absolute;
+    background-color: ${({ theme }) => theme.colors.black};
 `
 
-export const SuggestionsListItem = styled.li`
-    display: flex;
-    justify-content: flex-start;
-    flex-direction: row;
-
-    width: 100%;
-    margin-bottom: .5rem;
+export const SuggestionsList = styled(List)`
+    z-index: 100;
 `
 
-export const Row = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    flex-direction: column;
-
-    &:nth-child(2) {
-        margin-left: .5rem;
-    }
-`
-export const Title = styled.span`
-    color: ${({ theme }) => theme.colors.white};
-    margin-bottom: .5rem;
+export const ChoosedList = styled(List)`
+    z-index: 10;
 `
 
-export const Category = styled.span`
-    background-color: ${({ theme }) => theme.colors.blackVar2};
-    font-size: .7rem;
-
-    padding: .2rem .8rem;
-
-    border-radius: 5px;
-
-    color: ${({ theme }) => theme.colors.white};
-`
-
-export const Image = styled.div`
-    width: 50px;
-    height: 50px;
-
-    background-color: ${({ theme }) => theme.colors.blackVar2};
-
-    border-radius: 25px;
-`
 export const Button = styled.button<IsCTA>`
     font-size: 1.3rem;
 
@@ -165,4 +132,8 @@ export const Button = styled.button<IsCTA>`
 
     color: ${({ theme }) => theme.colors.white};
     background-color: ${({ theme, isCTA }) => (isCTA ? theme.colors.pink : theme.colors.blackVar2)};
+`
+export const ElementsHolder = styled.div`
+    width: 100%;
+    position: relative;
 `
