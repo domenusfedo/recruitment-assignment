@@ -7,6 +7,8 @@ export const SuggestionsListItem = styled.li`
 
     width: 100%;
     margin-bottom: .5rem;
+
+    cursor: pointer;
 `
 
 export const Row = styled.div`

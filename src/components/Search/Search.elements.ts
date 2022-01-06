@@ -10,6 +10,10 @@ interface IsCTA {
     isCTA: boolean
 }
 
+interface IsActive {
+    isActive: boolean
+}
+
 export const SearchHolder = styled.div`
     width: 100%;
     height: 100%;
@@ -76,9 +80,9 @@ export const ToggleButton = styled(IoIosClose)`
 `
 
 export const SearchPlace = styled.div`
-    margin: 1rem 0;
+    margin: 2rem 0;
     padding: .5rem 2rem;
-    width: 90%;
+    width: 95%;
 
     display: flex;
     justify-content: flex-start;
@@ -116,11 +120,11 @@ const List = styled.ul`
 `
 
 export const SuggestionsList = styled(List)`
-    z-index: 100;
+    z-index: 200;
 `
 
 export const ChoosedList = styled(List)`
-    z-index: 10;
+    z-index: 100;
 `
 
 export const Button = styled.button<IsCTA>`

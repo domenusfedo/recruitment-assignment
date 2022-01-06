@@ -1,7 +1,6 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
 
-import {addElementToChoosed, Suggestion} from '../../../features/termsSlice';
+import {Suggestion} from '../../../features/termsSlice';
 
 import {
     Category,
@@ -12,18 +11,19 @@ import {
 } from './Element.elements'
 
 interface IProps {
-    element: Suggestion
+    element: Suggestion,
+    addElementHandler: (element: Suggestion) => void
 }
 
-const Element: React.FC<IProps> = ({element}) => {
-    const dispatch = useDispatch();
+const Element: React.FC<IProps> = ({element, addElementHandler}) => {
 
-    const addElement = () => {
-        dispatch(addElementToChoosed(element))
+    const addHandler = () => {
+        console.log(element)
+        addElementHandler(element)
     }
 
     return (
-        <SuggestionsListItem key={element.id} onClick={addElement}>
+        <SuggestionsListItem key={element.id} onClick={addHandler}>
             <Row>
                 <Image/>
             </Row>

@@ -23,10 +23,6 @@ const initialState: TermsState = {
             category: 'Location',
             value: 'Warsaw'
         }, {
-            id: 3,
-            category: 'Location',
-            value: 'Wroclaw'
-        }, {
             id: 4,
             category: 'Category',
             value: 'React'
@@ -48,6 +44,9 @@ const termsSlice = createSlice({
     initialState,
     reducers: {
         addElementToChoosed: (state, action: PayloadAction<Suggestion>) => {
+            let index = state.choosed.findIndex(c => c.value === action.payload.value)
+            if (index !== -1) return;
+
             state.choosed = [...state.choosed, action.payload]
         },
         removeElementFromChoosed: (state, action: PayloadAction<Suggestion>) => {

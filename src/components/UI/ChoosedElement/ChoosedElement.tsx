@@ -1,27 +1,28 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
-
-import {removeElementFromChoosed, Suggestion} from '../../../features/termsSlice';
 
 import {
-    ElementHolder
+    Suggestion
+} from '../../../features/termsSlice';
+
+import {
+    ElementHolder,
+    RemoveButton,
+    Category,
+    Text
 } from './ChoosedElement.elements'
 
 interface IProps {
-    element: Suggestion
+    element: Suggestion,
+    removeElementHandler: (element: Suggestion) => void
 }
 
-const ChoosedElement: React.FC<IProps> = ({element}) => {
-
-    const dispatch = useDispatch();
-
-    const removeElement = () => {
-        dispatch(removeElementFromChoosed(element))
-    }
+const ChoosedElement: React.FC<IProps> = ({element, removeElementHandler}) => {
     
     return (
         <ElementHolder>
-            {element.value}
+            <Category>{element.category}</Category>
+            <Text>{element.value}</Text>
+            <RemoveButton onClick={() => removeElementHandler(element)}/>
         </ElementHolder>
     );
 };
