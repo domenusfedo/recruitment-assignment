@@ -1,17 +1,21 @@
 import React from 'react';
 
 import {
-  AppHolder
+  AppHolder,
+  Holder
 } from './App.elements';
 
-interface IProps {
+import { 
+  Search, 
+} from './components/index'
 
-}
+const App = () => {
 
-const App: React.FC<IProps> = () => {
   return (
    <AppHolder>
-     
+     <Holder>
+        <Search/>
+      </Holder>
    </AppHolder>
   );
 }
