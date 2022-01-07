@@ -3,7 +3,6 @@ import React from 'react';
 import {
   AppHolder,
   Holder,
-  SearchIcon
 } from './App.elements';
 
 import { 

@@ -79,6 +79,8 @@ export const SearchPlace = styled.div`
     justify-content: flex-start;
     flex-direction: column;
     align-items: center;
+    overflow-y: scroll;
+    &::-webkit-scrollbar {display:none;}
 `
 
 export const SearchIcon = styled(FaSearch)`
@@ -103,10 +105,11 @@ export const SearchField = styled.div<IsActive>`
     padding: 1rem 2rem;
     border: 1px solid ${({ theme }) => theme.colors.blackVar2};
     border-radius: 40px;
-    border-bottom-left-radius: ${({ isActive }) => (!isActive ? '40px' : '0px')};
-    border-bottom-right-radius: ${({ isActive }) => (!isActive ? '40px' : '0px')};
     flex-wrap: wrap;
 `
+
+// border-bottom-left-radius: ${({ isActive }) => (!isActive ? '40px' : '0px')};
+//     border-bottom-right-radius: ${({ isActive }) => (!isActive ? '40px' : '0px')};
 
 const List = styled.ul`
     text-decoration: none;
@@ -117,14 +120,9 @@ const List = styled.ul`
     width: 100%;
     background-color: ${({ theme }) => theme.colors.black};
 `
-
 export const SuggestionsList = styled(List)`
     padding: 1rem 1rem;
     width: 100%;
-`
-
-export const ChoosedList = styled(List)`
-    z-index: 100;
 `
 
 export const Button = styled.button<IsCTA>`
@@ -133,12 +131,6 @@ export const Button = styled.button<IsCTA>`
     border-radius: 25px;
     color: ${({ theme }) => theme.colors.white};
     background-color: ${({ theme, isCTA }) => (isCTA ? theme.colors.pink : theme.colors.blackVar2)};
-`
-export const ElementsHolder = styled.div`
-    width: 100%;
-    position: relative;
-    display: flex;
-    justify-content: center;
 `
 
 export const Row = styled.div<IsHorizontal>`
@@ -154,4 +146,5 @@ export const Input = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    outline: hidden;
 `

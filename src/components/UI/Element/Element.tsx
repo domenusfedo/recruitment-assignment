@@ -12,13 +12,13 @@ import {
 
 
 interface IProps {
-    element: Suggestion
+    element: Suggestion,
+    isActive: boolean
 }
 
-const Element: React.FC<IProps> = ({element}) => {
-    
+const Element: React.FC<IProps> = ({element, isActive}) => {
     return (
-        <SuggestionsListItem key={element.id}>
+        <SuggestionsListItem key={element.id} isActive={isActive}>
             <Row>
                 <Image/>
             </Row>

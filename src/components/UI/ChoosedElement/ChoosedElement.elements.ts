@@ -46,11 +46,3 @@ export const Category = styled.div`
 export const Text = styled.span`
     margin: 0 .5rem;
 `
-
-export const Row = styled.div`
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    flex-direction: column;
-`
