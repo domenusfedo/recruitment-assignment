@@ -18,13 +18,13 @@ interface IProps {
 
 const Element: React.FC<IProps> = ({element, isActive}) => {
     return (
-        <SuggestionsListItem key={element.id} isActive={isActive}>
+        <SuggestionsListItem key={element.id} isActive={isActive} role='group'>
             <Row>
                 <Image/>
             </Row>
             <Row>
-                <Title>{element.value}</Title>
-                <Category>{element.category}</Category>
+                <Title role='definition'>{element.value}</Title>
+                <Category role='content-info'>{element.category}</Category>
             </Row>
         </SuggestionsListItem>
     );

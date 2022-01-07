@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import {
     SearchHolder,
@@ -35,15 +35,14 @@ interface IProps {
 }
 
 const Search: React.FC<IProps> = () => {
-    const dispatch = useDispatch();
-
-    const {suggestions, choosed} = useSelector((state: RootState) => state.terms)
-
     const [showSuggestions, showSuggestionsSet] = React.useState<boolean>(false);
     const [terms, termsSet] = React.useState<string>('');
-
+    
     const [text, textSet] = React.useState<string>('Search');
     const [cursor, cursorSet] = React.useState<number>(0);
+    
+    const {suggestions, choosed} = useSelector((state: RootState) => state.terms)
+    const dispatch = useDispatch();
 
     const changeHandler = (value: string) => {
         if(cursor !== 0) return;
@@ -63,7 +62,7 @@ const Search: React.FC<IProps> = () => {
         dispatch(removeElementFromChoosed(element))
     }
 
-    useEffect(() => {
+    React.useEffect(() => {
         if(showSuggestions) {
             textSet('Skill, location, company')
         } else {
@@ -84,12 +83,12 @@ const Search: React.FC<IProps> = () => {
     //     }
     // }, [terms])
 
-    useEffect(() => {
+    React.useEffect(() => {
         if(cursor !== 0) return;
         dispatch(addKeywordToList(terms))
     }, [terms])
 
-    useEffect(() => {
+    React.useEffect(() => {
         termsSet(suggestions[cursor].value)
     }, [cursor])
 
@@ -141,7 +140,7 @@ const Search: React.FC<IProps> = () => {
                     </SearchField>
                 </Row>
                 <Row isHorizontal={false} isVisible={showSuggestions}>
-                    <SuggestionsList>
+                    <SuggestionsList role='contentinfo'>
                         {showSuggestions && suggestions.map((e, idx) => (
                                 <div key={e.value} onClick={() => addElementHandler(e)}> 
                                     {e.value !== '' ? <Element element={e} isActive={idx === cursor}/> : null}
