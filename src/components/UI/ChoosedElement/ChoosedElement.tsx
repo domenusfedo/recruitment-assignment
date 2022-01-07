@@ -8,7 +8,8 @@ import {
     ElementHolder,
     RemoveButton,
     Category,
-    Text
+    Text,
+    Row
 } from './ChoosedElement.elements'
 
 interface IProps {
@@ -20,9 +21,13 @@ const ChoosedElement: React.FC<IProps> = ({element, removeElementHandler}) => {
     
     return (
         <ElementHolder>
-            <Category>{element.category}</Category>
-            <Text>{element.value}</Text>
-            <RemoveButton onClick={() => removeElementHandler(element)}/>
+            {/* <Row> */}
+                <Text>{element.value}</Text>
+                <Category>{element.category.toUpperCase()}</Category>
+            {/* </Row>
+            <Row> */}
+                <RemoveButton onClick={() => removeElementHandler(element)}/>
+            {/* </Row> */}
         </ElementHolder>
     );
 };

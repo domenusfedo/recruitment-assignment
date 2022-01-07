@@ -10,13 +10,15 @@ export const ElementHolder = styled.div`
 
     padding: .5rem 1rem;
 
+    margin-bottom: .5rem;
+    margin-top: .5rem;
+    margin-right: .5rem;
+
     color: ${({ theme }) => theme.colors.white};
 
     display: flex;
     justify-content: center;
     align-items: center;
-
-    margin-bottom: .5rem;
 `
 
 export const RemoveButton = styled(IoIosClose)`
@@ -43,4 +45,12 @@ export const Category = styled.div`
 `
 export const Text = styled.span`
     margin: 0 .5rem;
+`
+
+export const Row = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
 `

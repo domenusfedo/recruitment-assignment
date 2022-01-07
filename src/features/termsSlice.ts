@@ -27,6 +27,10 @@ const initialState: TermsState = {
             category: 'Category',
             value: 'React'
         }, {
+            id: 3,
+            category: 'Location',
+            value: 'Wroclaw'
+        }, {
             id: 5,
             category: 'Skill',
             value: 'TypeScript'

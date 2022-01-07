@@ -7,6 +7,7 @@ export const SuggestionsListItem = styled.li`
 
     width: 100%;
     margin-bottom: .5rem;
+    background-color: transparent;
 
     cursor: pointer;
 `

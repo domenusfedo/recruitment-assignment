@@ -14,12 +14,16 @@ interface IsActive {
     isActive: boolean
 }
 
+interface IsHorizontal {
+    isHorizontal: boolean,
+    isVisible: boolean
+}
+
 export const SearchHolder = styled.div`
     width: 100%;
     height: 100%;
     background-color: ${({ theme }) => theme.colors.main};
     position: absolute;
-
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -29,18 +33,13 @@ export const SearchHolder = styled.div`
 export const Header = styled.div<IsAbsolute>`
     width: 100%;
     padding: 2rem;
-
     color: ${({ theme }) => theme.colors.white};
-
     position: ${({ isAbsolute }) => (isAbsolute ? 'absolute' : '')};
     bottom: 0;
     left: 0;
-
-
     display: flex;
     justify-content: space-between;
     align-items: center;
-
     border-bottom: 0.5px solid ${({ theme }) => theme.colors.blackVar2};
     border-top: 0.5px solid ${({ theme }) => theme.colors.blackVar2};
 `;
@@ -53,43 +52,33 @@ export const Text = styled.span`
 export const ButtonHolder = styled.div`
     width: 40px;
     height: 40px;
-
     border: 1px solid ${({ theme }) => theme.colors.white};
     border-radius: 50%;
-
     overflow: hidden;
-
     display: flex;
     justify-content: center;
     align-items: center;
 `;
 export const ToggleButton = styled(IoIosClose)`
     color: ${({ theme }) => theme.colors.white};
-
     width: 100%;
     height: 100%;
-
     font-size: 2rem;
-
     &:hover {
         background-color: ${({ theme }) => theme.colors.blackVar};
         cursor: pointer;
     }
-
     transition: all .5s;
 `
 
 export const SearchPlace = styled.div`
-    margin: 2rem 0;
+    margin-top: 2rem;
     padding: .5rem 2rem;
     width: 95%;
-
     display: flex;
     justify-content: flex-start;
+    flex-direction: column;
     align-items: center;
-
-    border: 1px solid ${({ theme }) => theme.colors.blackVar2};
-    border-radius: 40px;
 `
 
 export const SearchIcon = styled(FaSearch)`
@@ -97,16 +86,26 @@ export const SearchIcon = styled(FaSearch)`
     font-size: 1.5rem;
 `
 
-export const SearchField = styled.input`
+export const SearchInput = styled.input`
     outline: 0;
     padding: 1rem 1rem;
-    width: 100%;
     height: 100%;
-
     color: ${({ theme }) => theme.colors.white};
-
     font-family: inherit;
     font-size: 1rem;
+`
+export const SearchField = styled.div<IsActive>`
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 1rem 2rem;
+    border: 1px solid ${({ theme }) => theme.colors.blackVar2};
+    border-radius: 40px;
+    border-bottom-left-radius: ${({ isActive }) => (!isActive ? '40px' : '0px')};
+    border-bottom-right-radius: ${({ isActive }) => (!isActive ? '40px' : '0px')};
+    flex-wrap: wrap;
 `
 
 const List = styled.ul`
@@ -114,13 +113,14 @@ const List = styled.ul`
     list-style-type: none;
     margin: 0;
     padding: 1rem 2rem;
+    padding-top: 0;
     width: 100%;
-    position: absolute;
     background-color: ${({ theme }) => theme.colors.black};
 `
 
 export const SuggestionsList = styled(List)`
-    z-index: 200;
+    padding: 1rem 1rem;
+    width: 100%;
 `
 
 export const ChoosedList = styled(List)`
@@ -129,15 +129,29 @@ export const ChoosedList = styled(List)`
 
 export const Button = styled.button<IsCTA>`
     font-size: 1.3rem;
-
     padding: .8rem 2rem;
-
     border-radius: 25px;
-
     color: ${({ theme }) => theme.colors.white};
     background-color: ${({ theme, isCTA }) => (isCTA ? theme.colors.pink : theme.colors.blackVar2)};
 `
 export const ElementsHolder = styled.div`
     width: 100%;
     position: relative;
+    display: flex;
+    justify-content: center;
+`
+
+export const Row = styled.div<IsHorizontal>`
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: ${({ isHorizontal }) => (isHorizontal ? 'row' : 'column')};
+    display: ${({ isVisible }) => (isVisible ? 'block' : 'none')};
+`
+
+export const Input = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `

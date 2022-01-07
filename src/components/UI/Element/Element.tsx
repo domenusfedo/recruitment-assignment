@@ -10,20 +10,15 @@ import {
     Title
 } from './Element.elements'
 
+
 interface IProps {
-    element: Suggestion,
-    addElementHandler: (element: Suggestion) => void
+    element: Suggestion
 }
 
-const Element: React.FC<IProps> = ({element, addElementHandler}) => {
-
-    const addHandler = () => {
-        console.log(element)
-        addElementHandler(element)
-    }
-
+const Element: React.FC<IProps> = ({element}) => {
+    
     return (
-        <SuggestionsListItem key={element.id} onClick={addHandler}>
+        <SuggestionsListItem key={element.id}>
             <Row>
                 <Image/>
             </Row>

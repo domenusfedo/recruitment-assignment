@@ -12,7 +12,10 @@ import {
     ChoosedList,
     Header,
     Button,
-    ElementsHolder
+    Input,
+    ElementsHolder,
+    Row,
+    SearchInput
 } from './Search.elements'
 
 import {addElementToChoosed, removeElementFromChoosed, Suggestion} from '.././../features/termsSlice';
@@ -24,10 +27,10 @@ import Element from '../UI/Element/Element';
 import ChoosedElement from '../UI/ChoosedElement/ChoosedElement';
 
 interface IProps {
-    toggleSearchSet: React.Dispatch<React.SetStateAction<boolean>>
+    
 }
 
-const Search: React.FC<IProps> = ({toggleSearchSet}) => {
+const Search: React.FC<IProps> = () => {
     const dispatch = useDispatch();
 
     const {suggestions, choosed} = useSelector((state: RootState) => state.terms)
@@ -37,14 +40,13 @@ const Search: React.FC<IProps> = ({toggleSearchSet}) => {
 
     const [text, textSet] = React.useState<string>('Search');
 
-    const changeHanlder = (value: string) => {
+    const changeHandler = (value: string) => {
         termsSet(value)
     }
 
-    const toggleHanlder = () => {
+    const toggleHandler = () => {
         showSuggestionsSet(!showSuggestions)
     }
-
 
     const addElementHandler = (element: Suggestion) => {
         dispatch(addElementToChoosed(element))
@@ -53,7 +55,6 @@ const Search: React.FC<IProps> = ({toggleSearchSet}) => {
     const removeElementHandler = (element: Suggestion) => {
         dispatch(removeElementFromChoosed(element))
     }
-
 
     useEffect(() => {
         if(showSuggestions) {
@@ -65,7 +66,10 @@ const Search: React.FC<IProps> = ({toggleSearchSet}) => {
 
     useEffect(() => {
         const fetchTimer = setTimeout(() => {
-            console.log('search')
+            // const filtered = suggestions.filter(e => {
+                // Object.keys(e).some(k => e[k as keyof Suggestion ].toLowerCase().includes(terms));
+            // })
+            
             //fetching from API suggestionsSet
         }, 250)
         return () => {
@@ -77,44 +81,60 @@ const Search: React.FC<IProps> = ({toggleSearchSet}) => {
         <SearchHolder>
             <Header isAbsolute={false}>
                 <Text>Search</Text>
-                <ButtonHolder onClick={() => toggleSearchSet(false)}>
+                <ButtonHolder>
                     <ToggleButton/>
                 </ButtonHolder>
             </Header>
 
 
-            <SearchPlace>
-                <SearchIcon/>
-                <SearchField
-                    placeholder={text}
-                    value={terms}
-                    onChange={(e) => changeHanlder(e.target.value)}
-                    onFocus={toggleHanlder}
-                    onBlur={toggleHanlder}
-                />
+            <SearchPlace onFocus={toggleHandler}>
+                <Row isHorizontal={true} isVisible={true}>
+                    <SearchField isActive={showSuggestions}>
+                    {choosed.map((c: Suggestion) => <ChoosedElement key={c.value} element={c} removeElementHandler={removeElementHandler}/>)}
+                        <Input>
+                            <SearchIcon/>
+                            <SearchInput
+                                placeholder={text}
+                                value={terms}
+                                onChange={(e) => changeHandler(e.target.value)}
+                            />
+                        </Input>
+                    </SearchField>
+                </Row>
+                <Row isHorizontal={false} isVisible={showSuggestions}>
+                    <SuggestionsList>
+                        {terms.length > 0 &&  (
+                            <div key={terms} onClick={() => addElementHandler({
+                                    id: Math.random(),
+                                    category: 'KEYWORD',
+                                    value: terms
+                            })}>
+                                <Element element={{
+                                    id: Math.random(),
+                                    category: 'KEYWORD',
+                                    value: terms
+                                }}/>
+                            </div>
+                        )
+                            }
+                        {suggestions.map(e => (
+                            <div key={e.value} onClick={() => addElementHandler(e)}>
+                                <Element element={e}/>
+                            </div>
+                        ))}
+                    </SuggestionsList>
+                </Row>
             </SearchPlace>
             
             <ElementsHolder>
-
-                {/* <ChoosedList>
-                    {choosed.map((c: Suggestion) => <ChoosedElement key={c.value} element={c} removeElementHandler={removeElementHandler}/>)}
-                </ChoosedList> */}
-
-                {/* isActive={showSuggestions || choosed.length === 0} */}
-
-                <SuggestionsList>
-                    {terms.length > 0 && <Element key={terms} element={{
-                        value: terms,
-                        category: 'KEYWORD',
-                        id: Math.random()
-                    }} addElementHandler={addElementHandler}/>}
-
-                    {suggestions.map((s: Suggestion) => <Element key={s.value} element={s} addElementHandler={() => addElementHandler(s)}/>)}
-                </SuggestionsList>
+                {/* <ChoosedList> */}
+                    {/* {choosed.map((c: Suggestion) => <ChoosedElement key={c.value} element={c} removeElementHandler={removeElementHandler}/>)} */}
+                {/* </ChoosedList> */}
+                
             </ElementsHolder>
 
             <Header isAbsolute={true}>
-                <Button isCTA={false} onClick={() => toggleSearchSet(false)}>Clear search</Button>
+                <Button isCTA={false}>Clear search</Button>
                 <Button isCTA={true}>Show Offers</Button>
             </Header>
         </SearchHolder>

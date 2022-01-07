@@ -11,13 +11,11 @@ import {
 } from './components/index'
 
 const App = () => {
-  const [toggleSearch, toggleSearchSet] = React.useState<boolean>(false)
 
   return (
    <AppHolder>
      <Holder>
-        <SearchIcon onClick={() =>toggleSearchSet(!toggleSearch)}/>
-        {toggleSearch && <Search toggleSearchSet={toggleSearchSet}/>}
+        <Search/>
       </Holder>
    </AppHolder>
   );
