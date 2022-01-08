@@ -54,8 +54,28 @@ describe('termsSlice sync actions', () => {
         expect(stateAfter[0].value).toBe(userTerm);
         expect(stateAfter.length).toBe(initialState.suggestions.length);
     })
+
+    it('should not add next element if id is the same', () => {
+
+    })
 })
 
 describe('termsSlice async actions', () => {
+    it('should change suggestions', () => {
+        // const getUserMock = jest.spyOn(axios, 'get').mockResolvedValue({
+        //     data: [
+        //         {
+        //             
+        //         }
+        //     ]
+        // });
+    })
 
+    it('should restore defaults, becuase user input empty', () => {
+        //const getUserMock = jest.spyOn(axios, 'get').mockRejectedValueOnce('Mocked Error');
+    })
+
+    it('should restore defaults, becuase error', () => {
+        //const getUserMock = jest.spyOn(axios, 'get').mockRejectedValueOnce('Mocked Error');
+    })
 })

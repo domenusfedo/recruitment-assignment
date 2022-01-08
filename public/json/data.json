@@ -1,0 +1,101 @@
+{
+    "data": [
+        {
+            "id": 1,
+            "category": "LOCATION",
+            "value": "Cracow"
+        },{
+            "id": 2,
+            "category": "LOCATION",
+            "value": "Warsaw"
+        },{
+            "id": 3,
+            "category": "LOCATION",
+            "value": "Gdansk"
+        },{
+            "id": 4,
+            "category": "LOCATION",
+            "value": "Poznan"
+        },{
+            "id": 5,
+            "category": "LOCATION",
+            "value": "Wroclaw"
+        },{
+            "id": 6,
+            "category": "LOCATION",
+            "value": "Szczecin"
+        },{
+            "id": 7,
+            "category": "COMPANY",
+            "value": "NoA Ignite"
+        }, {
+            "id": 8,
+            "category": "COMPANY",
+            "value": "Apple"
+        }, {
+            "id": 9,
+            "category": "COMPANY",
+            "value": "Samsung"
+        }, {
+            "id": 10,
+            "category": "COMPANY",
+            "value": "Xiaomi"
+        }, {
+            "id": 11,
+            "category": "COMPANY",
+            "value": "Google"
+        }, {
+            "id": 12,
+            "category": "COMPANY",
+            "value": "Play"
+        }, {
+            "id": 13,
+            "category": "SKILL",
+            "value": "Node"
+        }, {
+            "id": 14,
+            "category": "SKILL",
+            "value": "TypeScript"
+        }, {
+            "id": 15,
+            "category": "SKILL",
+            "value": "Testing"
+        }, {
+            "id": 16,
+            "category": "SKILL",
+            "value": "Design"
+        }, {
+            "id": 17,
+            "category": "SKILL",
+            "value": "RWD"
+        }, {
+            "id": 18,
+            "category": "SKILL",
+            "value": "English"
+        }, {
+            "id": 19,
+            "category": "CATEGORY",
+            "value": "React"
+        }, {
+            "id": 20,
+            "category": "CATEGORY",
+            "value": "Node.js"
+        }, {
+            "id": 21,
+            "category": "CATEGORY",
+            "value": "Frontend"
+        }, {
+            "id": 22,
+            "category": "CATEGORY",
+            "value": "Backend"
+        }, {
+            "id": 23,
+            "category": "CATEGORY",
+            "value": "HTML"
+        }, {
+            "id": 24,
+            "category": "CATEGORY",
+            "value": "CSS"
+        }
+    ]
+}

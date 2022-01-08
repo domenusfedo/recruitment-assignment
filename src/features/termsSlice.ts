@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from 'axios';
-import { app } from "../firebase";
 
 
 export interface Suggestion {
@@ -30,7 +29,7 @@ const defaultValues: Suggestion[] = [
         category: 'LOCATION',
         value: 'Cracow'
     }, {
-        id: 2,
+        id: 7,
         category: 'COMPANY',
         value: 'NoA Ignite'
     }, {
@@ -38,7 +37,7 @@ const defaultValues: Suggestion[] = [
         category: 'LOCATION',
         value: 'Warsaw'
     }, {
-        id: 4,
+        id: 19,
         category: 'CATEGORY',
         value: 'React'
     }, {
@@ -46,7 +45,7 @@ const defaultValues: Suggestion[] = [
         category: 'LOCATION',
         value: 'Wroclaw'
     }, {
-        id: 6,
+        id: 14,
         category: 'SKILL',
         value: 'TypeScript'
     }
@@ -61,31 +60,31 @@ const initialState: TermsState = {
 export const fetchMoreData = createAsyncThunk(
     'user/getUser',
     async (args: string, { dispatch }) => {
-        // setLoading(true);
+        dispatch(setLoading(true));
 
         if (args === '') {
-            setLoading(false);
-            dispatch(addDefaultSuggestions())
+            dispatch(setLoading(false));
+            dispatch(addDefaultSuggestions());
             return;
         }
 
-        dispatch(testSortArray(args))
+        try {
+            const res = await axios.get('http://localhost:8000/data');
+            const fetchedData: Suggestion[] = res.data;
 
+            dispatch(setLoading(false));
 
-        // try {
-        //     const res = await axios.get('fake_API_URL'); //will fetch all suggestions
-        //     //filter sort
+            const filteredArray: Suggestion[] = fetchedData.filter(element => element.value.toLowerCase().includes(args.toLowerCase()));
 
-        //     addSuggestions([])
+            dispatch(addSuggestions({
+                userInput: args,
+                suggestions: filteredArray
+            }));
 
-        //     if (!res) { //length
-        //         dispatch(addDefaultSuggestions())
-        //     }
-        //     setLoading(false);
-        // } catch (err) {
-        //     dispatch(addDefaultSuggestions())
-        //     setLoading(false);
-        // }
+        } catch (err) {
+            dispatch(addDefaultSuggestions())
+            setLoading(false);
+        }
     }
 )
 
@@ -109,20 +108,17 @@ const termsSlice = createSlice({
             state.suggestions[0].id = Math.random();
         },
         addSuggestions: (state, action: PayloadAction<AddSuggestionsAction>) => {
-            const userSuggestion = defaultValues[0];
-            userSuggestion.value = action.payload.userInput;
-
-            state.suggestions = [userSuggestion, ...action.payload.suggestions]
+            const newDefaultuser: Suggestion = {
+                ...defaultValues[0],
+                value: action.payload.userInput
+            }
+            state.suggestions = [{ ...newDefaultuser }, ...action.payload.suggestions]
         },
         addDefaultSuggestions: (state) => {
             state.suggestions = defaultValues;
         },
         setLoading: (state, action: PayloadAction<boolean>) => {
             state.isLoading = action.payload;
-        },
-        //Will be removed
-        testSortArray: (state, action: PayloadAction<string>) => {
-            state.suggestions = state.suggestions.filter(element => element.value.includes(action.payload))
         }
     }
 })
@@ -133,8 +129,7 @@ export const {
     addKeywordToList,
     addSuggestions,
     addDefaultSuggestions,
-    setLoading,
-    testSortArray
+    setLoading
 } = termsSlice.actions
 
 export default termsSlice.reducer;

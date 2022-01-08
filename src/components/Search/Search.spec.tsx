@@ -212,9 +212,9 @@ describe('Mocked Search Component', () => {
 
         jest.spyOn(React, 'useState')
         .mockImplementationOnce(() => [true, jest.fn()])
-        .mockImplementationOnce(() => [userInputMocked ,jest.fn()])
-        .mockImplementationOnce(() => ['Search' ,jest.fn()])
-        .mockImplementationOnce(() => [0 ,jest.fn()])
+        .mockImplementationOnce(() => [userInputMocked, jest.fn()])
+        .mockImplementationOnce(() => ['Search', jest.fn()])
+        .mockImplementationOnce(() => [0, jest.fn()])
 
         jest.spyOn(React, 'useEffect')
         .mockImplementation(() => jest.fn()) //i am not sure why this is not working when i am trying to mock disptach here
@@ -231,5 +231,27 @@ describe('Mocked Search Component', () => {
         
         const combinedValues = state.suggestions[0].value + state.suggestions[0].category;
         expect(suggestions.childNodes[0].textContent).toBe(combinedValues);
+    })
+})
+
+describe('Sorting and fetching bahaviour', () => {
+    it('display default values and user input', () => {
+        // jest.spyOn(axios, 'get').mockResolvedValueOnce({
+        //     data: [
+        //         {
+        //            
+        //         }
+        //     ]
+        // });
+    })
+
+    it('display new fetched values and user input', () => {
+        // jest.spyOn(axios, 'get').mockResolvedValueOnce({
+        //     data: [
+        //         {
+        //             
+        //         }
+        //     ]
+        // });
     })
 })
