@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import axios from 'axios';
 import { app } from "../firebase";
 
 
@@ -12,6 +13,11 @@ export interface TermsState {
     suggestions: Suggestion[],
     choosed: Suggestion[],
     isLoading: boolean
+}
+
+interface AddSuggestionsAction {
+    suggestions: Suggestion[],
+    userInput: string
 }
 
 const defaultValues: Suggestion[] = [
@@ -54,9 +60,32 @@ const initialState: TermsState = {
 
 export const fetchMoreData = createAsyncThunk(
     'user/getUser',
-    async (args, { dispatch }) => {
-        //always add as a first element place to user's input
-        //if(fetch === 0) => initialData
+    async (args: string, { dispatch }) => {
+        // setLoading(true);
+
+        if (args === '') {
+            setLoading(false);
+            dispatch(addDefaultSuggestions())
+            return;
+        }
+
+        dispatch(testSortArray(args))
+
+
+        // try {
+        //     const res = await axios.get('fake_API_URL'); //will fetch all suggestions
+        //     //filter sort
+
+        //     addSuggestions([])
+
+        //     if (!res) { //length
+        //         dispatch(addDefaultSuggestions())
+        //     }
+        //     setLoading(false);
+        // } catch (err) {
+        //     dispatch(addDefaultSuggestions())
+        //     setLoading(false);
+        // }
     }
 )
 
@@ -78,6 +107,22 @@ const termsSlice = createSlice({
             if (action.payload === state.suggestions[0].value) return;
             state.suggestions[0].value = action.payload;
             state.suggestions[0].id = Math.random();
+        },
+        addSuggestions: (state, action: PayloadAction<AddSuggestionsAction>) => {
+            const userSuggestion = defaultValues[0];
+            userSuggestion.value = action.payload.userInput;
+
+            state.suggestions = [userSuggestion, ...action.payload.suggestions]
+        },
+        addDefaultSuggestions: (state) => {
+            state.suggestions = defaultValues;
+        },
+        setLoading: (state, action: PayloadAction<boolean>) => {
+            state.isLoading = action.payload;
+        },
+        //Will be removed
+        testSortArray: (state, action: PayloadAction<string>) => {
+            state.suggestions = state.suggestions.filter(element => element.value.includes(action.payload))
         }
     }
 })
@@ -85,7 +130,11 @@ const termsSlice = createSlice({
 export const {
     addElementToChoosed,
     removeElementFromChoosed,
-    addKeywordToList
+    addKeywordToList,
+    addSuggestions,
+    addDefaultSuggestions,
+    setLoading,
+    testSortArray
 } = termsSlice.actions
 
 export default termsSlice.reducer;
