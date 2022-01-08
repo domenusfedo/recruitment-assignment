@@ -89,6 +89,10 @@ const Search: React.FC<IProps> = () => {
         dispatch(addKeywordToList(terms))
     }, [terms, cursor])
 
+    React.useEffect(() => {
+        termsSet(suggestions[cursor].value)
+    }, [cursor])
+
     const keyDownHandler = (event: React.KeyboardEvent<HTMLDivElement>) => {
         switch(event.code) {
             case Buttons.ArrowUp : {
@@ -140,7 +144,7 @@ const Search: React.FC<IProps> = () => {
                 <Row isHorizontal={false} isVisible={showSuggestions}>
                     <SuggestionsList role='contentinfo'>
                         {showSuggestions && suggestions.map((suggestion, index) => (
-                                <div key={suggestion.value + index} onClick={() => addElementHandler(suggestion)}> 
+                                <div key={suggestion.value + index} onClick={addElementHandler.bind(null, suggestion)}> 
                                     {suggestion.value !== '' ? <Element element={suggestion} isActive={index === cursor}/> : null}
                                 </div>
                             )
