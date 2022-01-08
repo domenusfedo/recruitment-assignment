@@ -66,13 +66,13 @@ const termsSlice = createSlice({
     initialState,
     reducers: {
         addElementToChoosed: (state, action: PayloadAction<Suggestion>) => {
-            let index = state.choosed.findIndex(c => c.value === action.payload.value);
+            let index = state.choosed.findIndex(choosed => choosed.id === action.payload.id);
             if (index !== -1) return;
 
             state.choosed = [...state.choosed, action.payload];
         },
         removeElementFromChoosed: (state, action: PayloadAction<Suggestion>) => {
-            state.choosed = state.choosed.filter((e: Suggestion) => e.id !== action.payload.id);
+            state.choosed = state.choosed.filter((choosed: Suggestion) => choosed.id !== action.payload.id);
         },
         addKeywordToList: (state, action: PayloadAction<string>) => {
             if (action.payload === state.suggestions[0].value) return;

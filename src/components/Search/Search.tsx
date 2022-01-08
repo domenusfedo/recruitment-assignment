@@ -124,7 +124,7 @@ const Search: React.FC<IProps> = () => {
             <SearchPlace>
                 <Row isHorizontal={true} isVisible={true} onClick={toggleHandler}>
                     <SearchField isActive={showSuggestions}>
-                        {choosed.map((choosed: Suggestion) => <ChoosedElement key={choosed.value} element={choosed} removeElementHandler={removeElementHandler}/>)}
+                        {choosed.map((choosed: Suggestion, index) => <ChoosedElement key={choosed.value + index} element={choosed} removeElementHandler={removeElementHandler}/>)}
                         <Input onKeyDown={keyDownHandler}>
                             <SearchIcon/>
                             <SearchInput
@@ -140,7 +140,7 @@ const Search: React.FC<IProps> = () => {
                 <Row isHorizontal={false} isVisible={showSuggestions}>
                     <SuggestionsList role='contentinfo'>
                         {showSuggestions && suggestions.map((suggestion, index) => (
-                                <div key={suggestion.value} onClick={() => addElementHandler(suggestion)}> 
+                                <div key={suggestion.value + index} onClick={() => addElementHandler(suggestion)}> 
                                     {suggestion.value !== '' ? <Element element={suggestion} isActive={index === cursor}/> : null}
                                 </div>
                             )
