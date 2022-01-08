@@ -124,7 +124,6 @@ const Search: React.FC<IProps> = () => {
             <SearchPlace>
                 <Row isHorizontal={true} isVisible={true} onClick={toggleHandler}>
                     <SearchField isActive={showSuggestions}>
-                        {/* {terms.length > 0 ? <ChoosedElement key={terms} element={{id: 69, value:terms, category:'KEYWORD'}} removeElementHandler={removeElementHandler}/> : null} */}
                         {choosed.map((choosed: Suggestion) => <ChoosedElement key={choosed.value} element={choosed} removeElementHandler={removeElementHandler}/>)}
                         <Input onKeyDown={keyDownHandler}>
                             <SearchIcon/>

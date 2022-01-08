@@ -52,9 +52,13 @@ const initialState: TermsState = {
     isLoading: false
 }
 
-// export const fetchMoreData = createAsyncThunk`
-// if(fetch === 0) => initialData
-// ` 
+export const fetchMoreData = createAsyncThunk(
+    'user/getUser',
+    async (args, { dispatch }) => {
+        //always add as a first element place to user's input
+        //if(fetch === 0) => initialData
+    }
+)
 
 
 const termsSlice = createSlice({
