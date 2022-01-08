@@ -10,16 +10,16 @@ import {store} from './app/store';
 import {GlobalStyle} from './theme/GlobalStyle';
 import {theme} from './theme/theme';
 
-// require('dotenv').config();
+//require('dotenv').config();
 
 ReactDOM.render(
-  <React.StrictMode>
+  <>
     <Provider store={store}>
       <ThemeProvider theme={theme}>
         <GlobalStyle />
         <App />
       </ThemeProvider>
     </Provider>
-  </React.StrictMode>,
+  </>,
   document.getElementById('root')
 );

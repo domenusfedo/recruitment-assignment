@@ -44,9 +44,10 @@ const Search: React.FC<IProps> = () => {
     const {suggestions, choosed} = useSelector((state: RootState) => state.terms)
     const dispatch = useDispatch();
 
-    const changeHandler = (value: string) => {
+    const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if(event.target.value === terms) return;
         if(cursor !== 0) return;
-        termsSet(value)
+        termsSet(event.target.value)
     }
 
     const toggleHandler = () => {
@@ -86,14 +87,10 @@ const Search: React.FC<IProps> = () => {
     React.useEffect(() => {
         if(cursor !== 0) return;
         dispatch(addKeywordToList(terms))
-    }, [terms])
+    }, [terms, cursor])
 
-    React.useEffect(() => {
-        termsSet(suggestions[cursor].value)
-    }, [cursor])
-
-    const keyDownHandler = (e: React.KeyboardEvent<HTMLDivElement>) => {
-        switch(e.code) {
+    const keyDownHandler = (event: React.KeyboardEvent<HTMLDivElement>) => {
+        switch(event.code) {
             case Buttons.ArrowUp : {
                 if(cursor === 0) return;
                 cursorSet(cursor - 1)
@@ -127,13 +124,15 @@ const Search: React.FC<IProps> = () => {
             <SearchPlace>
                 <Row isHorizontal={true} isVisible={true} onClick={toggleHandler}>
                     <SearchField isActive={showSuggestions}>
-                    {choosed.map((c: Suggestion) => <ChoosedElement key={c.value} element={c} removeElementHandler={removeElementHandler}/>)}
+                        {/* {terms.length > 0 ? <ChoosedElement key={terms} element={{id: 69, value:terms, category:'KEYWORD'}} removeElementHandler={removeElementHandler}/> : null} */}
+                        {choosed.map((choosed: Suggestion) => <ChoosedElement key={choosed.value} element={choosed} removeElementHandler={removeElementHandler}/>)}
                         <Input onKeyDown={keyDownHandler}>
                             <SearchIcon/>
                             <SearchInput
+                                role='presentation'
                                 placeholder={text}
                                 value={terms}
-                                onChange={(e) => changeHandler(e.target.value)}
+                                onChange={(event) => changeHandler(event)}
                                 onBlur={() => cursorSet(0)}
                             />
                         </Input>
@@ -141,9 +140,9 @@ const Search: React.FC<IProps> = () => {
                 </Row>
                 <Row isHorizontal={false} isVisible={showSuggestions}>
                     <SuggestionsList role='contentinfo'>
-                        {showSuggestions && suggestions.map((e, idx) => (
-                                <div key={e.value} onClick={() => addElementHandler(e)}> 
-                                    {e.value !== '' ? <Element element={e} isActive={idx === cursor}/> : null}
+                        {showSuggestions && suggestions.map((suggestion, index) => (
+                                <div key={suggestion.value} onClick={() => addElementHandler(suggestion)}> 
+                                    {suggestion.value !== '' ? <Element element={suggestion} isActive={index === cursor}/> : null}
                                 </div>
                             )
                         )}

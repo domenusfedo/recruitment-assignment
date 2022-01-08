@@ -71,6 +71,7 @@ const termsSlice = createSlice({
             state.choosed = state.choosed.filter((e: Suggestion) => e.id !== action.payload.id);
         },
         addKeywordToList: (state, action: PayloadAction<string>) => {
+            if (action.payload === state.suggestions[0].value) return;
             state.suggestions[0].value = action.payload;
             state.suggestions[0].id = Math.random();
         }

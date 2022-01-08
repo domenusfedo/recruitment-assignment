@@ -52,5 +52,6 @@ describe('ChoosedElement Component', () => {
         expect(category).toBeInTheDocument();
 
         expect(category).toHaveTextContent(expectedValue.category);
+        expect(title).toHaveTextContent(expectedValue.value);
     })
 })
