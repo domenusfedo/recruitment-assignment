@@ -16,7 +16,7 @@ import {
     SearchInput
 } from './Search.elements'
 
-import {addElementToChoosed, addKeywordToList, removeElementFromChoosed, Suggestion} from '.././../features/termsSlice';
+import {addElementToChoosed, addKeywordToList, fetchMoreData, removeElementFromChoosed, Suggestion} from '.././../features/termsSlice';
 import { RootState } from '../../app/store';
 
 import { useSelector, useDispatch } from 'react-redux';
@@ -41,7 +41,7 @@ const Search: React.FC<IProps> = () => {
     const [text, textSet] = React.useState<string>('Search');
     const [cursor, cursorSet] = React.useState<number>(0);
     
-    const {suggestions, choosed} = useSelector((state: RootState) => state.terms)
+    const {suggestions, choosed, isLoading} = useSelector((state: RootState) => state.terms)
     const dispatch = useDispatch();
 
     const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -71,22 +71,17 @@ const Search: React.FC<IProps> = () => {
         }
     }, [showSuggestions])
 
-    // useEffect(() => {
-    //     const fetchTimer = setTimeout(() => {
-    //         // const filtered = suggestions.filter(e => {
-    //             // Object.keys(e).some(k => e[k as keyof Suggestion ].toLowerCase().includes(terms));
-    //         // })
-            
-    //         //fetching from API suggestionsSet
-    //     }, 250)
-    //     return () => {
-    //         clearTimeout(fetchTimer)
-    //     }
-    // }, [terms])
-
     React.useEffect(() => {
         if(cursor !== 0) return;
         dispatch(addKeywordToList(terms))
+
+        const fetchTimer = setTimeout(() => {
+            dispatch(fetchMoreData(terms))
+        }, 250)
+
+        return () => {
+            clearTimeout(fetchTimer)
+        }
     }, [terms, cursor])
 
     React.useEffect(() => {

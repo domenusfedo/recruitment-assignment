@@ -55,3 +55,7 @@ describe('termsSlice sync actions', () => {
         expect(stateAfter.length).toBe(initialState.suggestions.length);
     })
 })
+
+describe('termsSlice async actions', () => {
+
+})

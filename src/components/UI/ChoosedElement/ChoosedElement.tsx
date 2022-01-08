@@ -22,7 +22,7 @@ const ChoosedElement: React.FC<IProps> = ({element, removeElementHandler}) => {
         <ElementHolder>
             <Text role='definition'>{element.value}</Text>
             <Category role='content-info'>{element.category.toUpperCase()}</Category>
-            <RemoveButton role='button' onClick={() => removeElementHandler(element)}/>
+            <RemoveButton role='button' onClick={removeElementHandler.bind(null, element)}/>
         </ElementHolder>
     );
 };
