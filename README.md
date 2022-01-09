@@ -24,6 +24,7 @@ Project is created with:
 ```  
 ## How to Run?
 ```  
+- npm install (to-download-dependencies)
 - npm start (rect-app)
 - npm run start-server (json-server)
 ```  
