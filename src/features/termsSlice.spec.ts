@@ -58,7 +58,10 @@ describe('termsSlice sync actions', () => {
         const initialState = state;
         const userTerm = 'RandomString';
 
-        store.dispatch(addKeywordToList(userTerm));
+        store.dispatch(addKeywordToList({
+            id: Math.random(),
+            userInput: userTerm
+        }));
         const stateAfter = store.getState().terms.suggestions;
 
         expect(stateAfter[0].value).toBe(userTerm);

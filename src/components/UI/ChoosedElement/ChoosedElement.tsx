@@ -19,7 +19,7 @@ interface IProps {
 const ChoosedElement: React.FC<IProps> = ({element, removeElementHandler}) => {
     
     return (
-        <ElementHolder>
+        <ElementHolder id={element.id.toString()} role='combobox'>
             <Text role='definition'>{element.value}</Text>
             <Category role='content-info'>{element.category.toUpperCase()}</Category>
             <RemoveButton role='button' onClick={removeElementHandler.bind(null, element)}/>

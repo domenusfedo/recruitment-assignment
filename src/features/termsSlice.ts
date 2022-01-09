@@ -19,9 +19,14 @@ interface AddSuggestionsAction {
     userInput: string
 }
 
+export interface AddKeywordAction {
+    userInput: string,
+    id: number
+}
+
 export const defaultValues: Suggestion[] = [
     {
-        id: Math.random(),
+        id: 0,
         category: 'KEYWORD',
         value: ''
     }, {
@@ -72,13 +77,13 @@ export const fetchMoreData = createAsyncThunk(
             const res = await axios.get('http://localhost:8000/data');
             const fetchedData: Suggestion[] = res.data;
 
-
             dispatch(setLoading(false));
 
-            //const filteredArray: Suggestion[] = fetchedData.filter(element => element.value.toLowerCase().includes(args.toLowerCase()));
-            const filteredArray: Suggestion[] = fetchedData.filter(element => element.value.startsWith(args));
-
-            // console.log(filteredArray)
+            const filteredArray: Suggestion[] = fetchedData.filter(element => {
+                if (element.value.toLowerCase().startsWith(args.toLowerCase())) {
+                    return element
+                }
+            });
 
             dispatch(addSuggestions({
                 userInput: args,
@@ -92,24 +97,31 @@ export const fetchMoreData = createAsyncThunk(
     }
 )
 
-
 const termsSlice = createSlice({
     name: 'terms',
     initialState,
     reducers: {
         addElementToChoosed: (state, action: PayloadAction<Suggestion>) => {
-            let index = state.choosed.findIndex(choosed => choosed.id === action.payload.id);
+            let goodId = action.payload.id;
+            if (action.payload.id === 0) {
+                goodId = Math.random();
+            }
+
+            let index = state.choosed.findIndex(choosed => choosed.id === goodId);
             if (index !== -1) return;
 
-            state.choosed = [...state.choosed, action.payload];
+            state.choosed = [...state.choosed, {
+                ...action.payload,
+                id: goodId
+            }];
         },
         removeElementFromChoosed: (state, action: PayloadAction<Suggestion>) => {
             state.choosed = state.choosed.filter((choosed: Suggestion) => choosed.id !== action.payload.id);
         },
-        addKeywordToList: (state, action: PayloadAction<string>) => {
-            if (action.payload === state.suggestions[0].value) return;
-            state.suggestions[0].value = action.payload;
-            state.suggestions[0].id = Math.random();
+        addKeywordToList: (state, action: PayloadAction<AddKeywordAction>) => {
+            if (action.payload.userInput === state.suggestions[0].value) return;
+            state.suggestions[0].value = action.payload.userInput;
+            state.suggestions[0].id = action.payload.id;
         },
         addSuggestions: (state, action: PayloadAction<AddSuggestionsAction>) => {
             const newDefaultuser: Suggestion = {

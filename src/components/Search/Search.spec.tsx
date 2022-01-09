@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import { ThemeProvider } from 'styled-components';
 import { store } from '../../app/store';
 import { theme } from '../../theme/theme';
-import {addKeywordToList, defaultValues, fetchMoreData, TermsState} from '../../features/termsSlice'
+import {addKeywordToList, defaultValues, fetchMoreData, TermsState, AddKeywordAction} from '../../features/termsSlice'
 
 import Search from './Search';
 import axios from 'axios';
@@ -273,6 +273,7 @@ describe('Mocked Search Component', () => {
         .mockImplementationOnce(() => ['' ,jest.fn()])
         .mockImplementationOnce(() => ['Search' ,jest.fn()])
         .mockImplementationOnce(() => [0 ,jest.fn()])
+        .mockImplementationOnce(() => ['' ,jest.fn()])
 
         jest.spyOn(React, 'useEffect')
         .mockImplementation(() => jest.fn())
@@ -292,13 +293,17 @@ describe('Mocked Search Component', () => {
     })
 
     it("should render extra element with user's input", async () => {
-        const userInputMocked = 'TEST';
+        const userInputMocked: AddKeywordAction = {
+            id: Math.random(),
+            userInput: 'Test'
+        }
 
         jest.spyOn(React, 'useState')
         .mockImplementationOnce(() => [true, jest.fn()])
         .mockImplementationOnce(() => [userInputMocked, jest.fn()])
         .mockImplementationOnce(() => ['Search', jest.fn()])
         .mockImplementationOnce(() => [0, jest.fn()])
+        .mockImplementationOnce(() => ['' ,jest.fn()])
 
         jest.spyOn(React, 'useEffect')
         .mockImplementation(() => jest.fn()) //i am not sure why this is not working when i am trying to mock disptach here
@@ -310,8 +315,6 @@ describe('Mocked Search Component', () => {
         
         const input = await waitFor(() => screen.findByRole('presentation'));
         const suggestions = await waitFor(() => screen.findByRole('contentinfo'));
-   
-        expect(input.getAttribute('value')).toBe(userInputMocked);
         
         const combinedValues = state.suggestions[0].value + state.suggestions[0].category;
         expect(suggestions.childNodes[0].textContent).toBe(combinedValues);

@@ -37,9 +37,11 @@ interface IProps {
 const Search: React.FC<IProps> = () => {
     const [showSuggestions, showSuggestionsSet] = React.useState<boolean>(false);
     const [terms, termsSet] = React.useState<string>('');
+
+    const [suggestionText, suggestionTextSet] = React.useState<string>('');
     
-    const [text, textSet] = React.useState<string>('Search');
     const [cursor, cursorSet] = React.useState<number>(0);
+    const [text, textSet] = React.useState<string>('Search');
     
     const {suggestions, choosed, isLoading} = useSelector((state: RootState) => state.terms)
     const dispatch = useDispatch();
@@ -49,10 +51,9 @@ const Search: React.FC<IProps> = () => {
     const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         if(event.target.value === terms) return;
         if(cursor !== 0) return;
-        let stringTransformed = event.target.value.toLowerCase();
-        const moreTransformedString = stringTransformed.charAt(0).toUpperCase() + stringTransformed.slice(1);
+
+        termsSet(event.target.value)
         setLoading(true)
-        termsSet(moreTransformedString)
     }
 
     const toggleHandler = () => {
@@ -78,7 +79,10 @@ const Search: React.FC<IProps> = () => {
 
     React.useEffect(() => {
         if(cursor !== 0) return;
-        dispatch(addKeywordToList(terms))
+        dispatch(addKeywordToList({
+            userInput: terms,
+            id: Math.random()
+        }))
 
         const fetchTimer = setTimeout(() => {
             dispatch(fetchMoreData(terms))
@@ -93,9 +97,18 @@ const Search: React.FC<IProps> = () => {
         termsSet(suggestions[cursor].value)
     }, [cursor])
 
-    // React.useEffect(() => {
-    //     console.log(suggestions)
-    // },[suggestions])
+    React.useEffect(() => {
+        let transformedSuggestion;
+        let finalOutput;
+
+        if(!suggestions[1]) {
+            suggestionTextSet(terms)
+        } else {
+            transformedSuggestion = suggestions[1].value.slice(terms.length);
+            finalOutput = terms + transformedSuggestion;
+            suggestionTextSet(finalOutput)
+        }
+    },[suggestions])
 
     const keyDownHandler = (event: React.KeyboardEvent<HTMLDivElement>) => {
         switch(event.code) {
@@ -135,7 +148,7 @@ const Search: React.FC<IProps> = () => {
                         {choosed.map((choosed: Suggestion, index) => <ChoosedElement key={choosed.value + index} element={choosed} removeElementHandler={removeElementHandler}/>)}
                         <Input onKeyDown={keyDownHandler}>
                                 <SearchIcon/>
-                                {(!isLoading && terms !== '' && cursor === 0) && <SearchInput readOnly value='' ref={suggestionRef}/>}
+                                {(!isLoading && terms !== '' && cursor === 0) && <SearchInput readOnly value={suggestionText} ref={suggestionRef}/>}
                                 <SearchInput
                                         role='presentation'
                                         placeholder={text}
