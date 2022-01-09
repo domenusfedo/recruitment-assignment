@@ -88,14 +88,19 @@ export const SearchIcon = styled(FaSearch)`
     font-size: 1.5rem;
 `
 
-export const SearchInput = styled.input`
+interface IsMain {
+    isMain: boolean
+}
+
+export const SearchInput = styled.input<IsMain>`
     position: absolute;
     left: 15%;
     top: 50%;
     outline: 0;
     transform: translate(15%, -50%);
 
-    color: ${({ theme }) => theme.colors.white};
+    color: ${({ theme, isMain }) => (isMain ? `${theme.colors.white}` : `${theme.colors.whiteVar1}`)};
+
     font-family: inherit;
     font-size: 1rem;
     z-index: 100;

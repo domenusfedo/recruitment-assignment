@@ -148,8 +148,9 @@ const Search: React.FC<IProps> = () => {
                         {choosed.map((choosed: Suggestion, index) => <ChoosedElement key={choosed.value + index} element={choosed} removeElementHandler={removeElementHandler}/>)}
                         <Input onKeyDown={keyDownHandler}>
                                 <SearchIcon/>
-                                {(!isLoading && terms !== '' && cursor === 0) && <SearchInput readOnly value={suggestionText} ref={suggestionRef}/>}
+                                {(!isLoading && terms !== '' && cursor === 0) && <SearchInput isMain={false} readOnly value={suggestionText} ref={suggestionRef}/>}
                                 <SearchInput
+                                        isMain={true}
                                         role='presentation'
                                         placeholder={text}
                                         value={terms}

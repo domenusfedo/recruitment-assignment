@@ -5,6 +5,7 @@ export const theme = {
     blackVar2: '#464646',
     blackVar3: '#141414',
     white: '#BFBFBF',
+    whiteVar1: '#989898',
     pink: '#FF679C',
   }
 }
