@@ -89,13 +89,19 @@ export const SearchIcon = styled(FaSearch)`
 `
 
 export const SearchInput = styled.input`
+    position: absolute;
+    left: 15%;
+    top: 50%;
     outline: 0;
-    padding: 1rem 1rem;
-    height: 100%;
+    transform: translate(15%, -50%);
+
     color: ${({ theme }) => theme.colors.white};
     font-family: inherit;
     font-size: 1rem;
+    z-index: 100;
+    background-color: transparent;
 `
+
 export const SearchField = styled.div<IsActive>`
     width: 100%;
     height: 100%;
@@ -147,4 +153,5 @@ export const Input = styled.div`
     justify-content: center;
     align-items: center;
     outline: hidden;
+    position: relative;
 `

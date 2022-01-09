@@ -1,5 +1,6 @@
+import axios from 'axios';
 import { store } from '../app/store';
-import { TermsState, Suggestion } from './termsSlice';
+import { TermsState, Suggestion, fetchMoreData, defaultValues } from './termsSlice';
 
 import {
     addElementToChoosed,
@@ -33,6 +34,15 @@ describe('termsSlice sync actions', () => {
         expect(state.choosed.length).not.toEqual(initialState.choosed.length)
     })
 
+    it('should not add next element if id is the same', () => {
+        const initialState = state;
+
+        store.dispatch(addElementToChoosed(expectedValue));
+        state = store.getState().terms;
+
+        expect(state.choosed.length).toBe(initialState.choosed.length);
+    })
+
     it('should remove expectedElement from choosed', () => {
         const initialState = state;
 
@@ -54,28 +64,34 @@ describe('termsSlice sync actions', () => {
         expect(stateAfter[0].value).toBe(userTerm);
         expect(stateAfter.length).toBe(initialState.suggestions.length);
     })
-
-    it('should not add next element if id is the same', () => {
-
-    })
 })
 
 describe('termsSlice async actions', () => {
-    it('should change suggestions', () => {
-        // const getUserMock = jest.spyOn(axios, 'get').mockResolvedValue({
-        //     data: [
-        //         {
-        //             
-        //         }
-        //     ]
-        // });
+    let state: TermsState;
+
+    const userInput = 'Reac';
+    const userEmptyInput = '';
+
+    it('should change suggestions', async () => {
+        await store.dispatch(fetchMoreData(userInput));
+
+        state = store.getState().terms;
+        expect(state.suggestions[0].value).toBe(userInput)
+        expect(state.suggestions[1].value).toBe('React')
     })
 
-    it('should restore defaults, becuase user input empty', () => {
-        //const getUserMock = jest.spyOn(axios, 'get').mockRejectedValueOnce('Mocked Error');
+    it('should restore defaults, becuase user input is empty', () => {
+        store.dispatch(fetchMoreData(userEmptyInput));
+
+        state = store.getState().terms;
+        expect(state.suggestions[1]).toMatchObject(defaultValues[1])
     })
 
-    it('should restore defaults, becuase error', () => {
-        //const getUserMock = jest.spyOn(axios, 'get').mockRejectedValueOnce('Mocked Error');
+    it('should restore defaults, because network error', () => {
+        jest.spyOn(axios, 'get').mockRejectedValueOnce('Mocked Error');
+        store.dispatch(fetchMoreData(userInput));
+
+        state = store.getState().terms;
+        expect(state.suggestions[1]).toMatchObject(defaultValues[1])
     })
 })

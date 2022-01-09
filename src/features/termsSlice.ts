@@ -19,7 +19,7 @@ interface AddSuggestionsAction {
     userInput: string
 }
 
-const defaultValues: Suggestion[] = [
+export const defaultValues: Suggestion[] = [
     {
         id: Math.random(),
         category: 'KEYWORD',
@@ -72,9 +72,13 @@ export const fetchMoreData = createAsyncThunk(
             const res = await axios.get('http://localhost:8000/data');
             const fetchedData: Suggestion[] = res.data;
 
+
             dispatch(setLoading(false));
 
-            const filteredArray: Suggestion[] = fetchedData.filter(element => element.value.toLowerCase().includes(args.toLowerCase()));
+            //const filteredArray: Suggestion[] = fetchedData.filter(element => element.value.toLowerCase().includes(args.toLowerCase()));
+            const filteredArray: Suggestion[] = fetchedData.filter(element => element.value.startsWith(args));
+
+            // console.log(filteredArray)
 
             dispatch(addSuggestions({
                 userInput: args,

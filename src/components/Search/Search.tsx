@@ -16,7 +16,7 @@ import {
     SearchInput
 } from './Search.elements'
 
-import {addElementToChoosed, addKeywordToList, fetchMoreData, removeElementFromChoosed, Suggestion} from '.././../features/termsSlice';
+import {addElementToChoosed, addKeywordToList, fetchMoreData, removeElementFromChoosed, Suggestion, setLoading} from '.././../features/termsSlice';
 import { RootState } from '../../app/store';
 
 import { useSelector, useDispatch } from 'react-redux';
@@ -47,7 +47,10 @@ const Search: React.FC<IProps> = () => {
     const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         if(event.target.value === terms) return;
         if(cursor !== 0) return;
-        termsSet(event.target.value)
+        let stringTransformed = event.target.value.toLowerCase();
+        const moreTransformedString = stringTransformed.charAt(0).toUpperCase() + stringTransformed.slice(1);
+        setLoading(true)
+        termsSet(moreTransformedString)
     }
 
     const toggleHandler = () => {
@@ -125,14 +128,15 @@ const Search: React.FC<IProps> = () => {
                     <SearchField isActive={showSuggestions}>
                         {choosed.map((choosed: Suggestion, index) => <ChoosedElement key={choosed.value + index} element={choosed} removeElementHandler={removeElementHandler}/>)}
                         <Input onKeyDown={keyDownHandler}>
-                            <SearchIcon/>
-                            <SearchInput
-                                role='presentation'
-                                placeholder={text}
-                                value={terms}
-                                onChange={(event) => changeHandler(event)}
-                                onBlur={() => cursorSet(0)}
-                            />
+                                <SearchIcon/>
+                                {/* {(!isLoading && terms !== '' ) && <SearchInput readOnly value={suggestions[1].value}/>} */}
+                                <SearchInput
+                                        role='presentation'
+                                        placeholder={text}
+                                        value={terms}
+                                        onChange={(event) => changeHandler(event)}
+                                        onBlur={() => cursorSet(0)}
+                                /> 
                         </Input>
                     </SearchField>
                 </Row>

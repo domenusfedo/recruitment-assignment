@@ -5,9 +5,10 @@ import { Provider } from 'react-redux';
 import { ThemeProvider } from 'styled-components';
 import { store } from '../../app/store';
 import { theme } from '../../theme/theme';
-import {addKeywordToList, TermsState} from '../../features/termsSlice'
+import {addKeywordToList, defaultValues, fetchMoreData, TermsState} from '../../features/termsSlice'
 
 import Search from './Search';
+import axios from 'axios';
 
 const MockSearch = () => {
     return (
@@ -141,7 +142,7 @@ describe('Navigation behaviour', () => {
     })
 
     it("should stop increasing cursor if array has no more elements", async () => {
-    const moreThanExpectedLength = store.getState().terms.suggestions;
+        const moreThanExpectedLength = store.getState().terms.suggestions;
 
         component = render(<MockSearch/>);
         state = store.getState().terms;
@@ -167,7 +168,90 @@ describe('Navigation behaviour', () => {
     })
 
     it("should make user's input visible and have user's input", async () => {
-        //check if terms change will display user's input field
+        component = render(<MockSearch/>);
+        state = store.getState().terms;
+
+        const input = await waitFor(() => screen.findByRole('presentation'));
+        await fireEvent.click(input);
+
+        const testString = 'test';
+
+        await testString.split('').forEach((char) => {
+            fireEvent.change(input, {
+                target: {
+                    value: input.getAttribute('value') + char
+                }
+            })
+        });
+
+        state = store.getState().terms;
+
+        const suggestions = await waitFor(() => screen.findByRole('contentinfo'));
+        
+        const combinedValues = state.suggestions[0].value + state.suggestions[0].category;
+        expect(suggestions.childNodes[0].textContent).toBe(combinedValues);
+
+        await fireEvent.change(input, {
+            target: {
+                value: ''
+            }
+        })
+    })
+})
+
+describe('Sorting and fetching bahaviour', () => {
+    let component: any;
+    let state: TermsState;
+
+    const userInput = 'Rea';
+    const userEmptyInput = '';
+
+    const mockedResult = {
+        id: 19,
+        category: 'CATEGORY',
+        value: 'React'
+    }
+
+    beforeEach(() => {
+        state = store.getState().terms
+    })
+
+
+    it('should render new fetched values', async () => {
+        jest.spyOn(axios, 'get').mockResolvedValueOnce({
+            data: [
+                {
+                    ...mockedResult
+                }
+            ]
+        });
+        
+        component = render(<MockSearch/>);
+        await store.dispatch(fetchMoreData(userInput))
+
+        state = store.getState().terms;
+
+        const input = await waitFor(() => screen.findByRole('presentation'));
+        await fireEvent.click(input);
+
+        const parents = await waitFor(() => screen.findAllByRole('group'));
+
+        expect(parents[0].textContent).toBe(userInput + 'KEYWORD')
+        expect(parents[1].textContent).toBe(mockedResult.value + mockedResult.category)
+    })
+
+    it('should render default', async () => {
+        jest.spyOn(axios, 'get').mockRejectedValueOnce('Mocked Error');
+
+        component = render(<MockSearch/>);
+        await store.dispatch(fetchMoreData(userEmptyInput))
+        state = await store.getState().terms;
+
+        const input = await waitFor(() => screen.findByRole('presentation'));
+        await fireEvent.click(input);
+        
+        const parents = await waitFor(() => screen.findAllByRole('group'));
+        expect(parents[0].textContent).toBe(defaultValues[1].value + defaultValues[1].category);
     })
 })
 
@@ -231,27 +315,5 @@ describe('Mocked Search Component', () => {
         
         const combinedValues = state.suggestions[0].value + state.suggestions[0].category;
         expect(suggestions.childNodes[0].textContent).toBe(combinedValues);
-    })
-})
-
-describe('Sorting and fetching bahaviour', () => {
-    it('display default values and user input', () => {
-        // jest.spyOn(axios, 'get').mockResolvedValueOnce({
-        //     data: [
-        //         {
-        //            
-        //         }
-        //     ]
-        // });
-    })
-
-    it('display new fetched values and user input', () => {
-        // jest.spyOn(axios, 'get').mockResolvedValueOnce({
-        //     data: [
-        //         {
-        //             
-        //         }
-        //     ]
-        // });
     })
 })
