@@ -53,7 +53,6 @@ const Search: React.FC<IProps> = () => {
         if(cursor !== 0) return;
 
         termsSet(event.target.value)
-        setLoading(true)
     }
 
     const toggleHandler = () => {
@@ -100,6 +99,11 @@ const Search: React.FC<IProps> = () => {
     React.useEffect(() => {
         let transformedSuggestion;
         let finalOutput;
+
+        if(isLoading) {
+            suggestionTextSet('')
+            return;
+        }
 
         if(!suggestions[1]) {
             suggestionTextSet(terms)
@@ -148,7 +152,8 @@ const Search: React.FC<IProps> = () => {
                         {choosed.map((choosed: Suggestion, index) => <ChoosedElement key={choosed.value + index} element={choosed} removeElementHandler={removeElementHandler}/>)}
                         <Input onKeyDown={keyDownHandler}>
                                 <SearchIcon/>
-                                {(!isLoading && terms !== '' && cursor === 0) && <SearchInput isMain={false} readOnly value={suggestionText} ref={suggestionRef}/>}
+                                {(terms !== '' && cursor === 0) && <SearchInput isMain={false} readOnly value={suggestionText} ref={suggestionRef}/>}
+                                {/* {(!isLoading && terms !== '' && cursor === 0) && <SearchInput isMain={false} readOnly value={suggestionText} ref={suggestionRef}/>} */}
                                 <SearchInput
                                         isMain={true}
                                         role='presentation'
