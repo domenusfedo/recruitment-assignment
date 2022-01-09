@@ -44,6 +44,8 @@ const Search: React.FC<IProps> = () => {
     const {suggestions, choosed, isLoading} = useSelector((state: RootState) => state.terms)
     const dispatch = useDispatch();
 
+    const suggestionRef = React.useRef(null);
+
     const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         if(event.target.value === terms) return;
         if(cursor !== 0) return;
@@ -91,6 +93,10 @@ const Search: React.FC<IProps> = () => {
         termsSet(suggestions[cursor].value)
     }, [cursor])
 
+    // React.useEffect(() => {
+    //     console.log(suggestions)
+    // },[suggestions])
+
     const keyDownHandler = (event: React.KeyboardEvent<HTMLDivElement>) => {
         switch(event.code) {
             case Buttons.ArrowUp : {
@@ -129,7 +135,7 @@ const Search: React.FC<IProps> = () => {
                         {choosed.map((choosed: Suggestion, index) => <ChoosedElement key={choosed.value + index} element={choosed} removeElementHandler={removeElementHandler}/>)}
                         <Input onKeyDown={keyDownHandler}>
                                 <SearchIcon/>
-                                {/* {(!isLoading && terms !== '' ) && <SearchInput readOnly value={suggestions[1].value}/>} */}
+                                {(!isLoading && terms !== '' && cursor === 0) && <SearchInput readOnly value='' ref={suggestionRef}/>}
                                 <SearchInput
                                         role='presentation'
                                         placeholder={text}
