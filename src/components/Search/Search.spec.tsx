@@ -307,6 +307,8 @@ describe('Mocked Search Component', () => {
 
         jest.spyOn(React, 'useEffect')
         .mockImplementation(() => jest.fn()) //i am not sure why this is not working when i am trying to mock disptach here
+        //Update I think that i should import * as ReactRedux from 'react-redux' and use useSelector and useDispatch in the same way as React.useState
+        //So in the component it should be ReactRedux.useSelector so I will be able to mock these functions
 
         store.dispatch(addKeywordToList(userInputMocked)) //Manually mocked dispatch 'in useEffect'
 
