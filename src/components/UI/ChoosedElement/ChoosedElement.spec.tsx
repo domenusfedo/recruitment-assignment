@@ -35,7 +35,7 @@ describe('ChoosedElement Component', () => {
     it('should render category in upper case', async () => {
         component = render(<Provider store={store}>
             <ThemeProvider theme={theme}>
-                <ChoosedElement element={expectedValue} removeElementHandler={mockedReduxFunction}/>
+                <ChoosedElement element={expectedValue}/>
             </ThemeProvider>
         </Provider>);
 

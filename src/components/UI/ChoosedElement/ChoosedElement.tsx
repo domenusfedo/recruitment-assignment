@@ -9,20 +9,28 @@ import {
     RemoveButton,
     Category,
     Text,
-} from './ChoosedElement.elements'
+} from './ChoosedElement.elements';
+
+import { removeElementFromChoosed } from '../../../features/termsSlice'
+import { useDispatch } from 'react-redux';
 
 interface IProps {
-    element: Suggestion,
-    removeElementHandler: (element: Suggestion) => void
+    element: Suggestion
 }
 
-const ChoosedElement: React.FC<IProps> = ({element, removeElementHandler}) => {
+// useMemo this function
+const removeElementHandler = () => {
+
+}
+
+
+const ChoosedElement: React.FC<IProps> = ({element}) => {
     
     return (
         <ElementHolder id={element.id.toString()} role='combobox'>
             <Text role='definition'>{element.value}</Text>
             <Category role='content-info'>{element.category.toUpperCase()}</Category>
-            <RemoveButton role='button' onClick={removeElementHandler.bind(null, element)}/>
+            <RemoveButton role='button'/>
         </ElementHolder>
     );
 };

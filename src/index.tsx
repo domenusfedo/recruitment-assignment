@@ -10,8 +10,6 @@ import {store} from './app/store';
 import {GlobalStyle} from './theme/GlobalStyle';
 import {theme} from './theme/theme';
 
-//require('dotenv').config();
-
 ReactDOM.render(
   <>
     <Provider store={store}>

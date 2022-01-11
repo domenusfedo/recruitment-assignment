@@ -16,10 +16,10 @@ import {
     SearchInput
 } from './Search.elements'
 
-import {addElementToChoosed, addKeywordToList, fetchMoreData, removeElementFromChoosed, Suggestion, setLoading} from '.././../features/termsSlice';
+import {addElementToChoosed, addKeywordToList, fetchMoreData, Suggestion} from '.././../features/termsSlice';
 import { RootState } from '../../app/store';
 
-import { useSelector, useDispatch } from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 
 import Element from '../UI/Element/Element';
 import ChoosedElement from '../UI/ChoosedElement/ChoosedElement';
@@ -30,23 +30,17 @@ enum Buttons {
     Enter = 'Enter',
 }
 
-interface IProps {
-    
-}
-
-const Search: React.FC<IProps> = () => {
+const Search: React.FC = () => {
     const [showSuggestions, showSuggestionsSet] = React.useState<boolean>(false);
     const [terms, termsSet] = React.useState<string>('');
-
-    const [suggestionText, suggestionTextSet] = React.useState<string>('');
-    
-    const [cursor, cursorSet] = React.useState<number>(0);
+    const [suggestionText, suggestionTextSet] = React.useState<string>(''); //This will be in seperate Component
+    const [cursor, cursorSet] = React.useState<number>(0); //This will be in custom hook
     const [text, textSet] = React.useState<string>('Search');
     
+    const suggestionRef = React.useRef<HTMLInputElement>(null);
+
     const {suggestions, choosed, isLoading} = useSelector((state: RootState) => state.terms)
     const dispatch = useDispatch();
-
-    const suggestionRef = React.useRef(null);
 
     const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         if(event.target.value === terms) return;
@@ -54,27 +48,6 @@ const Search: React.FC<IProps> = () => {
 
         termsSet(event.target.value)
     }
-
-    const toggleHandler = () => {
-        showSuggestionsSet(true)
-    }
-
-    const addElementHandler = (element: Suggestion) => {
-        if(element.value === '') return;
-        dispatch(addElementToChoosed(element))
-    }
-
-    const removeElementHandler = (element: Suggestion) => {
-        dispatch(removeElementFromChoosed(element))
-    }
-
-    React.useEffect(() => {
-        if(showSuggestions) {
-            textSet('Skill, location, company')
-        } else {
-            textSet('Search')
-        }
-    }, [showSuggestions])
 
     React.useEffect(() => {
         if(cursor !== 0) return;
@@ -101,19 +74,24 @@ const Search: React.FC<IProps> = () => {
         let finalOutput;
 
         if(isLoading) {
+            //suggestionRef.current!.value = ''
             suggestionTextSet('')
             return;
         }
 
         if(!suggestions[1]) {
+            //suggestionRef.current!.value = terms
             suggestionTextSet(terms)
         } else {
             transformedSuggestion = suggestions[1].value.slice(terms.length);
             finalOutput = terms + transformedSuggestion;
+            //suggestionRef.current!.value = finalOutput
+            //suggestionRef.current?.value = ''
             suggestionTextSet(finalOutput)
         }
-    },[suggestions])
+    }, [suggestions])
 
+    //This will be in custom hook
     const keyDownHandler = (event: React.KeyboardEvent<HTMLDivElement>) => {
         switch(event.code) {
             case Buttons.ArrowUp : {
@@ -127,15 +105,17 @@ const Search: React.FC<IProps> = () => {
                 break;
             }
             case Buttons.Enter : {
-                addElementHandler(suggestions[cursor])
+                if(suggestions[cursor].value === '') return;
+                dispatch(addElementToChoosed(suggestions[cursor]))
                 break;
             }
             default: {
                 cursorSet(0)
-                return
+                return;
             }
         }
     }
+    //This will be in custom hook
 
     return (
         <SearchHolder>
@@ -147,13 +127,13 @@ const Search: React.FC<IProps> = () => {
             </Header>
 
             <SearchPlace>
-                <Row isHorizontal={true} isVisible={true} onClick={toggleHandler}>
+                <Row isHorizontal={true} isVisible={true} onClick={() => showSuggestionsSet(true)}>
                     <SearchField isActive={showSuggestions}>
-                        {choosed.map((choosed: Suggestion, index) => <ChoosedElement key={choosed.value + index} element={choosed} removeElementHandler={removeElementHandler}/>)}
-                        <Input onKeyDown={keyDownHandler}>
+                        {choosed.map((choosed: Suggestion, index) => <ChoosedElement key={choosed.value + index} element={choosed} />)}
+                        
+                        <Input onKeyDown={keyDownHandler} onBlur={() => textSet('Search')} onFocus={() => textSet('Skill, location, company')}>
                                 <SearchIcon/>
                                 {(terms !== '' && cursor === 0) && <SearchInput isMain={false} readOnly value={suggestionText} ref={suggestionRef}/>}
-                                {/* {(!isLoading && terms !== '' && cursor === 0) && <SearchInput isMain={false} readOnly value={suggestionText} ref={suggestionRef}/>} */}
                                 <SearchInput
                                         isMain={true}
                                         role='presentation'
@@ -165,12 +145,11 @@ const Search: React.FC<IProps> = () => {
                         </Input>
                     </SearchField>
                 </Row>
+
                 <Row isHorizontal={false} isVisible={showSuggestions}>
                     <SuggestionsList role='contentinfo'>
-                        {showSuggestions && suggestions.map((suggestion, index) => (
-                                <div key={suggestion.value + index} onClick={addElementHandler.bind(null, suggestion)}> 
-                                    {suggestion.value !== '' ? <Element element={suggestion} isActive={index === cursor}/> : null}
-                                </div>
+                        {showSuggestions && suggestions.map((suggestion, index) => (// Should be a button
+                                    suggestion.value !== '' ? <Element key={suggestion.value + index} element={suggestion} data-value={suggestion.value} isActive={index === cursor}/> : null
                             )
                         )}
                     </SuggestionsList>
