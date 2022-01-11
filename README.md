@@ -4,6 +4,7 @@
 * [Technologies]
 * [How to Run?]
 * [Requirements]
+* [To Improve]
 
 ## General info
 ``` recruitment-assignment ``` NoA Ignite Recruitment Assignment
@@ -14,7 +15,7 @@ Project is created with:
 - React + Redux
 - TypeScript
 - Styled Components
-- Jest
+- React Testing + Jest
 ```  
 
 ## Requirements
@@ -31,5 +32,14 @@ Project is created with:
 
 ## How to Test?
 ```  
-- npm test (jest)
+- npm test (react-testing + jest)
+```  
+
+## To Improve
+```  
+- Redux Store should be create by function (to have clear state in every test - seperate tests)
+- seperate tests! (do not check if element is active or not by its Styles)
+- create custom hook (useOnKeyDown)
+- Not all logic in one component
+- Proper HTML tags!
 ```  
