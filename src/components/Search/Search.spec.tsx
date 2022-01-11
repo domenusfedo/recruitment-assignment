@@ -21,7 +21,7 @@ const MockSearch = () => {
 }
 
 describe('Navigation behaviour', () => {
-    let component: any;
+    let component: any; // read about that
     let state: TermsState;
 
     it("should toggle suggestions", async () => {

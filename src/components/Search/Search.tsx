@@ -74,19 +74,16 @@ const Search: React.FC = () => {
         let finalOutput;
 
         if(isLoading) {
-            //suggestionRef.current!.value = ''
             suggestionTextSet('')
             return;
         }
 
         if(!suggestions[1]) {
-            //suggestionRef.current!.value = terms
+            //suggestionRef.current!.value = terms ??
             suggestionTextSet(terms)
         } else {
             transformedSuggestion = suggestions[1].value.slice(terms.length);
             finalOutput = terms + transformedSuggestion;
-            //suggestionRef.current!.value = finalOutput
-            //suggestionRef.current?.value = ''
             suggestionTextSet(finalOutput)
         }
     }, [suggestions])

@@ -63,7 +63,7 @@ const initialState: TermsState = {
 }
 
 export const fetchMoreData = createAsyncThunk(
-    'user/getUser',
+    'terms/fetchData',
     async (args: string, { dispatch }) => {
         dispatch(setLoading(true));
 

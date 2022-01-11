@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, waitFor, screen, fireEvent} from '@testing-library/react';
+import { render, waitFor, screen, fireEvent, RenderResult} from '@testing-library/react';
 
 import { Provider } from 'react-redux';
 import { ThemeProvider } from 'styled-components';
@@ -23,7 +23,7 @@ const mockedReduxFunction = jest.fn();
 // }
 
 describe('ChoosedElement Component', () => {
-    let component: any;
+    let component: RenderResult;
     let state: TermsState;
 
     const expectedValue: Suggestion = {
